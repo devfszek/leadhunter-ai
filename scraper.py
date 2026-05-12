@@ -8,7 +8,7 @@ def buscar_leads(busca):
     dados_empresas = []
 
     with sync_playwright() as p:
-        browser = p.chromium.launch(headless=False, slow_mo=300)
+        browser = p.chromium.launch(headless=True)
         page = browser.new_page()
 
         page.goto("https://www.google.com/maps/search/" + busca.replace(" ", "+"))
