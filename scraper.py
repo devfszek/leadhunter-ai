@@ -8,10 +8,19 @@ def buscar_leads(busca):
     dados_empresas = []
 
     with sync_playwright() as p:
-        browser = p.chromium.launch(headless=True)
+        browser = p.chromium.launch(
+            headless=True,
+            args=["--no-sandbox", "--disable-dev-shm-usage"]
+        )
+
         page = browser.new_page()
 
-        page.goto("https://www.google.com/maps/search/" + busca.replace(" ", "+"))
+        page.goto(
+            "https://www.google.com/maps/search/" + busca.replace(" ", "+"),
+            wait_until="domcontentloaded",
+            timeout=60000
+        )
+
         time.sleep(10)
 
         for _ in range(5):
@@ -26,7 +35,7 @@ def buscar_leads(busca):
                 empresas.nth(i).click()
                 time.sleep(5)
 
-                nome = page.locator('h1.DUwDvf').inner_text()
+                nome = page.locator('h1.DUwDvf').inner_text(timeout=10000)
 
                 telefone = "Não encontrado"
                 tel = page.locator('button[data-item-id*="phone"]')
@@ -45,13 +54,13 @@ def buscar_leads(busca):
 
                 nota = "Sem nota"
                 try:
-                    nota = page.locator('div.F7nice span').first.inner_text()
+                    nota = page.locator('div.F7nice span').first.inner_text(timeout=5000)
                 except:
                     pass
 
                 avaliacoes = "0 avaliações"
                 try:
-                    avaliacoes = page.locator('div.F7nice span').nth(1).inner_text()
+                    avaliacoes = page.locator('div.F7nice span').nth(1).inner_text(timeout=5000)
                 except:
                     pass
 
@@ -95,7 +104,11 @@ Se quiser, posso te mostrar um exemplo gratuitamente.
 
                 telefone_limpo = ''.join(filter(str.isdigit, telefone))
                 texto_formatado = urllib.parse.quote(mensagem)
-                link_whatsapp = f"https://wa.me/55{telefone_limpo}?text={texto_formatado}"
+
+                if telefone_limpo.startswith("55"):
+                    link_whatsapp = f"https://wa.me/{telefone_limpo}?text={texto_formatado}"
+                else:
+                    link_whatsapp = f"https://wa.me/55{telefone_limpo}?text={texto_formatado}"
 
                 if site == "Não possui site":
                     dados_empresas.append({
