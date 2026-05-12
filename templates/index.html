@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <title>LeadHunter AI</title>
+
+  <style>
+    body {
+      font-family: Arial;
+      background: #0f0f0f;
+      color: white;
+      padding: 40px;
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: auto;
+    }
+
+    h1 {
+      color: #00ff88;
+    }
+
+    input {
+      width: 70%;
+      padding: 14px;
+      border: none;
+      border-radius: 10px;
+      font-size: 16px;
+    }
+
+    button {
+      padding: 14px 20px;
+      border: none;
+      border-radius: 10px;
+      background: #00ff88;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    table {
+      width: 100%;
+      margin-top: 30px;
+      border-collapse: collapse;
+      background: #1c1c1c;
+      border-radius: 10px;
+      overflow: hidden;
+    }
+
+    th, td {
+      padding: 14px;
+      border-bottom: 1px solid #333;
+      text-align: left;
+    }
+
+    th {
+      background: #00ff88;
+      color: #111;
+    }
+
+    a {
+      color: #00ff88;
+      text-decoration: none;
+      font-weight: bold;
+    }
+  </style>
+</head>
+
+<body>
+
+<div class="container">
+
+  <h1>LeadHunter AI</h1>
+
+  <p>Encontre empresas sem landing page.</p>
+
+  <form method="POST">
+    <input
+      type="text"
+      name="busca"
+      placeholder="Ex: barbearia em manaus"
+      required
+    >
+
+    <button type="submit">
+      Buscar Leads
+    </button>
+  </form>
+
+  {% if leads %}
+
+  <table>
+    <tr>
+      <th>Empresa</th>
+      <th>Telefone</th>
+      <th>Nota</th>
+      <th>Avaliações</th>
+      <th>Score</th>
+      <th>Nível</th>
+      <th>WhatsApp</th>
+    </tr>
+
+    {% for lead in leads %}
+
+    <tr>
+      <td>{{ lead.Empresa }}</td>
+      <td>{{ lead.Telefone }}</td>
+      <td>{{ lead.Nota }}</td>
+      <td>{{ lead.Avaliacoes }}</td>
+      <td>{{ lead.Score }}</td>
+      <td>{{ lead.Nivel }}</td>
+      <td>
+        <a href="{{ lead.WhatsApp }}" target="_blank">
+          Abrir WhatsApp
+        </a>
+      </td>
+    </tr>
+
+    {% endfor %}
+
+  </table>
+
+  {% endif %}
+
+</div>
+
+</body>
+</html>
